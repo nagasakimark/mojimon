@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mojimon</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="stage">
+
+  <!-- ===== TITLE ===== -->
+  <section id="title" class="screen active">
+    <div class="title-bg"></div>
+    <div id="title-parade"></div>
+    <div class="logo">
+      <div class="logo-main">MOJIMON</div>
+      <div class="logo-sub">もじモン</div>
+    </div>
+    <div class="title-tag">Catch all 52 letter monsters!　<span class="jp">もじモンを ぜんぶ つかまえよう！</span></div>
+
+    <div class="mode-row">
+      <button class="nav mode-btn" data-mode="upper"><span class="mode-big">ABC</span><span class="mode-jp">おおもじ</span></button>
+      <button class="nav mode-btn" data-mode="lower"><span class="mode-big">abc</span><span class="mode-jp">こもじ</span></button>
+      <button class="nav mode-btn" data-mode="mixed"><span class="mode-big">Aa</span><span class="mode-jp">ミックス</span></button>
+    </div>
+
+    <div class="opt-row">
+      <button class="nav opt-btn" id="btn-words"></button>
+      <button class="nav opt-btn" id="btn-music"></button>
+      <button class="nav opt-btn" id="btn-dex-title"></button>
+    </div>
+  </section>
+
+  <!-- ===== BATTLE ===== -->
+  <section id="battle" class="screen">
+    <div class="field">
+      <div class="sky"></div>
+      <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+      <div class="grass"></div>
+      <div class="tufts"></div>
+      <div class="pad pad-enemy"></div>
+      <div class="pad pad-partner"></div>
+
+      <div id="enemy" class="mon enemy"><img id="enemy-img" alt=""></div>
+      <div id="partner" class="mon partner"><img id="partner-img" alt=""></div>
+
+      <div class="infobox enemy-box">
+        <div class="ib-top"><span class="ib-wild">Wild</span><span id="enemy-name" class="ib-name"></span><span id="enemy-new" class="ib-new">NEW</span></div>
+        <div class="hp-row"><span class="hp-label">HP</span><div class="hp-bar"><div id="enemy-hp" class="hp-fill"></div></div></div>
+      </div>
+
+      <div class="infobox partner-box">
+        <div class="ib-top"><span id="partner-name" class="ib-name small"></span><span class="ib-team">Your Mojimon</span></div>
+        <div class="dex-count">ずかん <b id="partner-dex"></b> / 52</div>
+      </div>
+
+      <div id="ball" class="ball-wrap"><div class="ball"></div></div>
+      <div id="sparkles"></div>
+      <div id="flash"></div>
+
+      <div class="corner">
+        <button class="nav corner-btn" id="btn-run"><span>Run</span><small>にげる</small></button>
+        <button class="nav corner-btn" id="btn-home"><span>⌂</span><small>タイトル</small></button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div id="msg" class="msg"></div>
+      <div id="quiz" class="quiz">
+        <div class="question">Which one starts with <span id="q-letter" class="q-letter"></span> ?</div>
+        <div id="cards" class="cards"></div>
+      </div>
+      <div id="actions" class="actions"></div>
+    </div>
+    <div id="wipe"></div>
+  </section>
+
+  <!-- ===== MOJIDEX ===== -->
+  <section id="dex" class="screen">
+    <div class="dex-head">
+      <div class="dex-title">Mojidex <span class="jp">もじモンずかん</span></div>
+      <div class="dex-total"><b id="dex-total"></b> / 52</div>
+    </div>
+    <div id="dex-grid" class="dex-grid"></div>
+    <div class="dex-foot">
+      <button class="nav opt-btn" id="btn-dex-back">◀ Back <span class="jp">もどる</span></button>
+      <button class="nav opt-btn danger" id="btn-dex-reset">Reset <span class="jp">リセット</span></button>
+    </div>
+    <div id="confirm" class="confirm">
+      <div class="confirm-box">
+        <div class="confirm-text">Release all Mojimon?<br><span class="jp">ぜんぶ にがしますか？</span></div>
+        <div class="confirm-row">
+          <button class="nav opt-btn" id="btn-reset-no">No <span class="jp">いいえ</span></button>
+          <button class="nav opt-btn danger" id="btn-reset-yes">Yes <span class="jp">はい</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+<script src="js/words.js"></script>
+<script src="js/sound.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>

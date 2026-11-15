@@ -11,18 +11,20 @@
 
   <!-- ===== TITLE ===== -->
   <section id="title" class="screen active">
-    <div class="title-bg"></div>
-    <div id="title-parade"></div>
+    <div class="title-sky"></div>
+    <img class="title-rays spin-slow" src="img/rays.svg" alt="">
+    <div class="title-ground"></div>
+    <div class="parade-wrap"><div id="title-parade" class="parade"></div></div>
     <div class="logo">
-      <div class="logo-main">MOJIMON</div>
+      <div class="logo-main"><span>M</span><span>O</span><span>J</span><span>I</span><span>M</span><span>O</span><span>N</span></div>
       <div class="logo-sub">もじモン</div>
     </div>
-    <div class="title-tag">Catch all 52 letter monsters!　<span class="jp">もじモンを ぜんぶ つかまえよう！</span></div>
+    <div class="title-tag">Catch all 52 letter monsters!<span class="jp">もじモンを ぜんぶ つかまえよう！</span></div>
 
     <div class="mode-row">
-      <button class="nav mode-btn" data-mode="upper"><span class="mode-big">ABC</span><span class="mode-jp">おおもじ</span></button>
-      <button class="nav mode-btn" data-mode="lower"><span class="mode-big">abc</span><span class="mode-jp">こもじ</span></button>
-      <button class="nav mode-btn" data-mode="mixed"><span class="mode-big">Aa</span><span class="mode-jp">ミックス</span></button>
+      <button class="nav mode-btn m-upper" data-mode="upper"><span class="mode-big">ABC</span><span class="mode-jp">おおもじ</span></button>
+      <button class="nav mode-btn m-lower" data-mode="lower"><span class="mode-big">abc</span><span class="mode-jp">こもじ</span></button>
+      <button class="nav mode-btn m-mixed" data-mode="mixed"><span class="mode-big">Aa</span><span class="mode-jp">ミックス</span></button>
     </div>
 
     <div class="opt-row">
@@ -32,32 +34,61 @@
     </div>
   </section>
 
+  <!-- ===== REVEAL ===== -->
+  <section id="reveal" class="screen">
+    <div class="rv-bg"></div>
+    <img class="rv-rays spin-slow" src="img/rays.svg" alt="">
+    <div class="rv-banner"><span class="rv-q">What letter is it?</span><span class="jp">これは なんの もじ？</span></div>
+    <img class="rv-pad" src="img/pad.svg" alt="">
+    <div class="rv-shadow"></div>
+    <div id="rv-mon" class="rv-mon"><div class="act"><div class="idle"><img id="rv-img" alt=""></div></div></div>
+    <div id="rv-card" class="rv-card">
+      <div class="rv-face rv-front">?</div>
+      <div class="rv-face rv-back"><span id="rv-letter"></span></div>
+    </div>
+    <div id="rv-its" class="rv-its"></div>
+    <div class="rv-foot">
+      <button class="nav act-btn" id="btn-reveal">Reveal! <span class="jp">こたえ</span></button>
+      <div class="rv-hint">Space / OK</div>
+    </div>
+    <div class="corner">
+      <button class="nav corner-btn" id="btn-rv-skip"><span>Skip</span><small>ほかの</small></button>
+      <button class="nav corner-btn" id="btn-rv-home"><span>⌂</span><small>タイトル</small></button>
+    </div>
+  </section>
+
   <!-- ===== BATTLE ===== -->
   <section id="battle" class="screen">
-    <div class="field">
-      <div class="sky"></div>
+    <div id="field" class="field">
+      <img class="bg" src="img/bg.svg" alt="">
       <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
-      <div class="grass"></div>
-      <div class="tufts"></div>
-      <div class="pad pad-enemy"></div>
-      <div class="pad pad-partner"></div>
 
-      <div id="enemy" class="mon enemy"><img id="enemy-img" alt=""></div>
-      <div id="partner" class="mon partner"><img id="partner-img" alt=""></div>
+      <div id="enemy-side" class="side">
+        <img class="pad pad-enemy" src="img/pad.svg" alt="">
+        <div class="shadow sh-enemy"></div>
+        <div id="enemy" class="mon enemy"><div class="act"><div class="idle"><img id="enemy-img" alt=""></div></div>
+          <div id="dizzy" class="dizzy"><div class="dz-spin"><b>★</b><b>★</b><b>★</b></div></div>
+        </div>
+      </div>
+      <div id="partner-side" class="side">
+        <img class="pad pad-partner" src="img/pad.svg" alt="">
+        <div class="shadow sh-partner"></div>
+        <div id="partner" class="mon partner"><div class="act"><div class="idle"><img id="partner-img" alt=""></div></div></div>
+      </div>
 
-      <div class="infobox enemy-box">
+      <div id="enemy-box" class="infobox enemy-box">
         <div class="ib-top"><span class="ib-wild">Wild</span><span id="enemy-name" class="ib-name"></span><span id="enemy-new" class="ib-new">NEW</span></div>
-        <div class="hp-row"><span class="hp-label">HP</span><div class="hp-bar"><div id="enemy-hp" class="hp-fill"></div></div></div>
+        <div class="hp-row"><span class="hp-label">HP</span><div class="hp-bar"><div id="enemy-ghost" class="hp-ghost"></div><div id="enemy-hp" class="hp-fill"></div><div class="hp-shine"></div></div></div>
       </div>
-
-      <div class="infobox partner-box">
+      <div id="partner-box" class="infobox partner-box">
         <div class="ib-top"><span id="partner-name" class="ib-name small"></span><span class="ib-team">Your Mojimon</span></div>
-        <div class="dex-count">ずかん <b id="partner-dex"></b> / 52</div>
+        <div class="dex-count"><span class="jp">ずかん</span> <b id="partner-dex"></b> / 52</div>
       </div>
 
-      <div id="ball" class="ball-wrap"><div class="ball"></div></div>
-      <div id="sparkles"></div>
-      <div id="flash"></div>
+      <div id="ball" class="ball-wrap"><img class="ball" src="img/ball.svg" alt=""></div>
+      <div id="pow" class="pow"></div>
+      <div id="praise" class="praise"></div>
+      <div id="flash" class="flash"></div>
 
       <div class="corner">
         <button class="nav corner-btn" id="btn-run"><span>Run</span><small>にげる</small></button>
@@ -66,14 +97,23 @@
     </div>
 
     <div class="panel">
-      <div id="msg" class="msg"></div>
+      <div id="msg" class="msg"><div id="msg-text"></div><div class="msg-arrow">▼</div></div>
       <div id="quiz" class="quiz">
         <div class="question">Which one starts with <span id="q-letter" class="q-letter"></span> ?</div>
         <div id="cards" class="cards"></div>
       </div>
       <div id="actions" class="actions"></div>
     </div>
-    <div id="wipe"></div>
+
+    <div id="result" class="result">
+      <img class="res-rays spin-slow" src="img/rays.svg" alt="">
+      <div class="res-banner">GOTCHA!</div>
+      <div class="res-mon"><img id="res-img" alt=""></div>
+      <div id="res-new" class="res-new">NEW!</div>
+      <div id="res-text" class="res-text"></div>
+      <div id="res-count" class="res-count"></div>
+      <div id="res-actions" class="res-actions"></div>
+    </div>
   </section>
 
   <!-- ===== MOJIDEX ===== -->
@@ -98,9 +138,12 @@
     </div>
   </section>
 
+  <canvas id="fx" width="1920" height="1080"></canvas>
+  <div id="wipe"></div>
 </div>
 <script src="js/words.js"></script>
 <script src="js/sound.js"></script>
+<script src="js/fx.js"></script>
 <script src="js/game.js"></script>
 </body>
 </html>

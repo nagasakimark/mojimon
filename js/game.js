@@ -22,6 +22,16 @@
   function letterOf(id) { return id.charAt(id.length - 1); }
   function nameOf(id) { return isUpper(id) ? letterOf(id).toUpperCase() : letterOf(id); }
   function imgOf(id) { return "img/monsters/" + id + ".webp"; }
+  // focus without letting the browser scroll the stage (that caused the page to jump)
+  function focusEl(el) {
+    if (!el) return;
+    try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); }
+    resetScroll();
+  }
+  function resetScroll() {
+    var els = [document.documentElement, document.body, $("stage")].concat([].slice.call(document.querySelectorAll(".screen, .panel, .cards, .field")));
+    els.forEach(function (el) { if (el.scrollTop || el.scrollLeft) { el.scrollTop = 0; el.scrollLeft = 0; } });
+  }
   function restart(el, cls) { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
   function act(who, cls) {   // play an action animation on a monster's .act layer
     var a = $(who).querySelector(".act");
@@ -52,6 +62,7 @@
     st.webkitTransform = st.transform = "scale(" + s + ")";
   }
   window.addEventListener("resize", fit); fit();
+  document.addEventListener("scroll", resetScroll, true);
 
   // ---------- screens ----------
   function show(name) {
@@ -132,6 +143,7 @@
   // ================= REVEAL =================
   function startEncounter(mode) {
     if (mode) S.mode = mode;
+    clearTimers();          // stop anything still running from the last fight
     S.busy = true;
     S.enemy = chooseEnemy(); S.lastEnemy = S.enemy;
     wipe(function () { show("reveal"); setupReveal(); }, introReveal);
@@ -143,6 +155,7 @@
     $("rv-card").classList.remove("flipped");
     $("rv-letter").textContent = nameOf(S.enemy);
     $("rv-its").classList.remove("show");
+    $("rv-card").classList.remove("shake");
     $("btn-reveal").style.visibility = "visible";
     document.querySelector(".rv-hint").style.visibility = "visible";
     S.phase = "reveal-intro";
@@ -153,7 +166,7 @@
     $("rv-mon").classList.remove("hidden");
     act("rv-mon", "a-appear");
     after(550, function () { Sound.play("appear"); FX.ring(760, 560, { r: 420, color: "#fff", width: 30, life: 0.6 }); });
-    after(700, function () { S.phase = "reveal-wait"; S.busy = false; $("btn-reveal").focus(); });
+    after(700, function () { S.phase = "reveal-wait"; S.busy = false; focusEl($("btn-reveal")); });
   }
 
   var lastAdvance = 0;
@@ -211,6 +224,12 @@
     $("enemy-new").classList.toggle("show", !isCaught(e));
     $("partner-name").textContent = nameOf(S.partnerId);
     $("partner-dex").textContent = S.caught.length;
+    // clear finished animations: they would replay when the battle screen is shown again
+    $("pow").className = "pow"; $("pow").innerHTML = "";
+    $("praise").className = "praise";
+    $("field").className = "field";
+    $("enemy-hp").parentNode.classList.remove("bump");
+    $("flash").style.opacity = 0;
     setHP(1, true);
     var ball = $("ball"); ball.style.display = "none"; ball.className = "ball-wrap";
     $("result").classList.remove("show");
@@ -319,7 +338,7 @@
     });
     $("quiz").classList.add("show");
     S.busy = false;
-    box.firstChild.focus();
+    focusEl(box.firstChild);
   }
 
   function mark(card, ok) {
@@ -354,7 +373,7 @@
       after(200, function () { Sound.play("whoosh"); act("enemy", "a-dodge"); praise("Miss!", true); });
       after(800, function () { if (!S.busy) { act("enemy", "a-taunt"); Sound.play("taunt"); } });
       var left = [].filter.call($("cards").children, function (c) { return !c.disabled; });
-      if (left.length) left[0].focus();
+      if (left.length) focusEl(left[0]);
     }
   }
 
@@ -438,7 +457,7 @@
     });
     box.classList.add("show");
     S.busy = false;
-    box.firstChild.focus();
+    focusEl(box.firstChild);
   }
 
   // ball flight: parabola with spin and sparkle trail
@@ -567,12 +586,12 @@
       return !el.disabled && el.offsetParent !== null && el.style.visibility !== "hidden";
     });
   }
-  function focusFirst() { var it = navItems(); if (it.length) it[0].focus(); }
+  function focusFirst() { var it = navItems(); if (it.length) focusEl(it[0]); }
   function center(el) { var r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }
   function moveFocus(dx, dy) {
     var items = navItems(); if (!items.length) return;
     var cur = document.activeElement;
-    if (items.indexOf(cur) < 0) { items[0].focus(); return; }
+    if (items.indexOf(cur) < 0) { focusEl(items[0]); return; }
     var c = center(cur), best = null, bestScore = 1e9;
     items.forEach(function (el) {
       if (el === cur) return;
@@ -582,8 +601,13 @@
       var score = main + side * 2.5;
       if (score < bestScore) { bestScore = score; best = el; }
     });
-    if (best) { best.focus(); Sound.play("move"); }
+    if (best) { focusEl(best); Sound.play("move"); }
   }
+
+  // show the focus ring and wiggle only when a remote/keyboard is being used
+  function setKeyboard(on) { document.body.classList.toggle("kb", on); }
+  document.addEventListener("mousedown", function () { setKeyboard(false); }, true);
+  document.addEventListener("touchstart", function () { setKeyboard(false); }, true);
 
   var started = false;
   function firstGesture() { Sound.unlock(); if (!started) { started = true; Sound.resumeMusic(); } }
@@ -593,6 +617,13 @@
   document.addEventListener("keydown", function (ev) {
     firstGesture();
     var k = ev.keyCode;
+    if (k >= 37 && k <= 40 && !document.body.classList.contains("kb")) {
+      // first arrow press just shows where the focus is
+      setKeyboard(true); ev.preventDefault();
+      if (navItems().indexOf(document.activeElement) < 0) focusFirst();
+      return;
+    }
+    if (k >= 37 && k <= 40 || k === 13 || k === 32 || (k >= 49 && k <= 52)) setKeyboard(true);
     if (k === 37) { moveFocus(-1, 0); ev.preventDefault(); return; }
     if (k === 39) { moveFocus(1, 0); ev.preventDefault(); return; }
     if (k === 38) { moveFocus(0, -1); ev.preventDefault(); return; }
@@ -634,10 +665,10 @@
   });
   $("btn-dex-title").addEventListener("click", function () { Sound.play("select"); show("dex"); });
   $("btn-dex-back").addEventListener("click", function () { Sound.play("select"); show("title"); });
-  $("btn-dex-reset").addEventListener("click", function () { Sound.play("select"); $("confirm").classList.add("show"); $("btn-reset-no").focus(); });
-  $("btn-reset-no").addEventListener("click", function () { $("confirm").classList.remove("show"); $("btn-dex-reset").focus(); });
+  $("btn-dex-reset").addEventListener("click", function () { Sound.play("select"); $("confirm").classList.add("show"); focusEl($("btn-reset-no")); });
+  $("btn-reset-no").addEventListener("click", function () { $("confirm").classList.remove("show"); focusEl($("btn-dex-reset")); });
   $("btn-reset-yes").addEventListener("click", function () {
-    S.caught = []; S.partner = null; save("caught", []); save("partner", null); buildDex(); $("btn-dex-back").focus();
+    S.caught = []; S.partner = null; save("caught", []); save("partner", null); buildDex(); focusEl($("btn-dex-back"));
   });
   $("btn-run").addEventListener("click", function () { if (S.busy) return; Sound.play("select"); startEncounter(); });
   $("btn-home").addEventListener("click", function () { Sound.play("select"); show("title"); });

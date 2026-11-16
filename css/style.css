@@ -16,7 +16,7 @@ img { -webkit-user-drag: none; }
 
 /* focus ring for TV remotes */
 .nav { outline: none; -webkit-transition: -webkit-transform .15s; transition: transform .15s, box-shadow .15s; }
-.nav:focus { box-shadow: 0 0 0 8px #fff, 0 0 0 16px #ffcc00, 0 14px 30px rgba(0,0,0,.35) !important; -webkit-transform: translateY(-6px) scale(1.05); transform: translateY(-6px) scale(1.05); z-index: 5; }
+body.kb .nav:focus { box-shadow: 0 0 0 8px #fff, 0 0 0 16px #ffcc00, 0 14px 30px rgba(0,0,0,.35) !important; -webkit-transform: translateY(-6px) scale(1.05); transform: translateY(-6px) scale(1.05); z-index: 5; }
 .nav:active { -webkit-transform: scale(.96); transform: scale(.96); }
 
 .spin-slow { -webkit-animation: spin 40s linear infinite; animation: spin 40s linear infinite; }
@@ -146,7 +146,8 @@ img { -webkit-user-drag: none; }
 .infobox.slide-in-r { -webkit-animation: slideR .6s cubic-bezier(.2,.9,.3,1) both; animation: slideR .6s cubic-bezier(.2,.9,.3,1) both; }
 .infobox.hidden { visibility: hidden; }
 .enemy-box { left: 100px; top: 50px; width: 660px; height: 178px; }
-.partner-box { left: 1210px; top: 525px; width: 600px; height: 150px; }
+.partner-box { left: 1210px; top: 508px; width: 600px; height: 172px; }
+.partner-box .ib-top { height: 76px; line-height: 76px; }
 .ib-top { height: 84px; line-height: 84px; white-space: nowrap; }
 .ib-wild { font-size: 38px; color: #7a8796; margin-right: 18px; vertical-align: top; }
 .ib-name { font-family: "Andika", sans-serif; font-size: 82px; color: #1f2d3d; vertical-align: top; }
@@ -168,7 +169,7 @@ img { -webkit-user-drag: none; }
 .hp-bar.bump { -webkit-animation: shake .35s; animation: shake .35s; }
 @-webkit-keyframes blink { 50% { opacity: .55; } }
 @keyframes blink { 50% { opacity: .55; } }
-.dex-count { font-size: 34px; color: #556; } .dex-count b { font-size: 40px; color: #2a64c5; }
+.dex-count { font-size: 34px; line-height: 52px; color: #556; white-space: nowrap; } .dex-count b { font-size: 40px; color: #2a64c5; }
 .dex-count .jp { font-size: 30px; }
 
 .corner { position: absolute; right: 24px; top: 20px; z-index: 6; }
@@ -208,7 +209,7 @@ img { -webkit-user-drag: none; }
 #wipe .wipe-ball.on { opacity: 1; -webkit-transform: rotate(360deg); transform: rotate(360deg); }
 
 /* ================= PANEL ================= */
-.panel { position: absolute; left: 0; top: 700px; width: 1920px; height: 380px; background: linear-gradient(#3a6aa8, #274d80); border-top: 10px solid #1b3a63; }
+.panel { position: absolute; left: 0; top: 700px; width: 1920px; height: 380px; overflow: hidden; background: linear-gradient(#3a6aa8, #274d80); border-top: 10px solid #1b3a63; }
 .panel:before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 100%; opacity: .08;
   background: radial-gradient(circle, #fff 4px, transparent 5px); background-size: 40px 40px; }
 .msg { position: absolute; left: 40px; top: 28px; width: 1840px; height: 314px; background: #fff; border: 10px solid #2b3a4a; border-radius: 30px; box-shadow: inset 0 0 0 8px #d6e4f5, 0 10px 0 rgba(0,0,0,.25); padding: 44px 70px; font-size: 66px; line-height: 1.3; display: none; }
@@ -235,7 +236,11 @@ img { -webkit-user-drag: none; }
 .card.noword .word { display: none; }
 .card .num { position: absolute; left: 14px; top: 12px; width: 50px; height: 50px; border-radius: 50%; color: #fff; font-size: 30px; line-height: 50px; text-align: center; }
 .c0 .num { background: #ff5a5f; } .c1 .num { background: #2ec4b6; } .c2 .num { background: #ffb400; } .c3 .num { background: #4c8dff; }
-.card:focus .pic { -webkit-animation: wiggle .6s ease-in-out infinite; animation: wiggle .6s ease-in-out infinite; }
+.card .pic { -webkit-animation: bob 1.6s ease-in-out infinite; animation: bob 1.6s ease-in-out infinite; }
+.card.c1 .pic { -webkit-animation-delay: -.4s; animation-delay: -.4s; } .card.c2 .pic { -webkit-animation-delay: -.8s; animation-delay: -.8s; } .card.c3 .pic { -webkit-animation-delay: -1.2s; animation-delay: -1.2s; }
+@-webkit-keyframes bob { 0%,100% { -webkit-transform: translateY(0) rotate(-3deg); } 50% { -webkit-transform: translateY(-8px) rotate(3deg); } }
+@keyframes bob { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-8px) rotate(3deg); } }
+.card.wrong .pic, .card.fade .pic { -webkit-animation: none; animation: none; }
 @-webkit-keyframes wiggle { 25% { -webkit-transform: rotate(-7deg) scale(1.06); } 75% { -webkit-transform: rotate(7deg) scale(1.06); } }
 @keyframes wiggle { 25% { transform: rotate(-7deg) scale(1.06); } 75% { transform: rotate(7deg) scale(1.06); } }
 .card .mark { position: absolute; left: 50%; top: 0; width: 184px; height: 184px; margin-left: -92px; pointer-events: none; }
